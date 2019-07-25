@@ -1,0 +1,122 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "6cdf3dcc-bc52-4008-a6e2-f9ed931e441d": {
+        "id": "6cdf3dcc-bc52-4008-a6e2-f9ed931e441d",
+        "parent": null,
+        "name": "indunilfirefox",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "4708f2d9-37ad-4101-a4f1-eaee0a2bb100"
+        ],
+        "isRemovable": false,
+        "filePath": "indunilfirefox"
+      },
+      "4708f2d9-37ad-4101-a4f1-eaee0a2bb100": {
+        "id": "4708f2d9-37ad-4101-a4f1-eaee0a2bb100",
+        "parent": "6cdf3dcc-bc52-4008-a6e2-f9ed931e441d",
+        "name": "lambda.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "indunilfirefox/lambda.js",
+        "code": "let AWS = require('aws-sdk');\nconst s3 = new AWS.S3();\n\nexports.handler = function (event, context, callback) {\n\n    s3.putObject({\n        \"Body\": \"check test\",\n        \"Bucket\": \"indunil1\",\n        \"Key\": \"1.jpg\"\n    })\n        .promise()\n        .then(data => {\n            console.log(data);           // successful response\n            /*\n            data = {\n                ETag: \"\\\"6805f2cfc46c0f04559748bb039d69ae\\\"\",\n                VersionId: \"pSKidl4pHBiNwukdbcPXAIs.sshFFOc0\"\n            }\n            */\n        })\n        .catch(err => {\n            console.log(err, err.stack); // an error occurred\n        });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "apigusEast1indunil123testindany",
+            "config": {}
+          }
+        ]
+      }
+    },
+    "deletedFiles": [],
+    "rootNode": "6cdf3dcc-bc52-4008-a6e2-f9ed931e441d",
+    "openFiles": [
+      "4708f2d9-37ad-4101-a4f1-eaee0a2bb100"
+    ],
+    "currentFileId": "4708f2d9-37ad-4101-a4f1-eaee0a2bb100",
+    "resources": {
+      "apigusEast1indunil123testindany": {
+        "name": "apigusEast1indunil123testindany",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-east-1",
+          "apiMode": 0,
+          "apiName": "indunil123",
+          "endpointType": "REGIONAL",
+          "resourceMode": 0,
+          "resourceName": "test/ind",
+          "resourcePath": "/test/ind",
+          "restMethod": "ANY",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "test",
+          "mode": 0
+        }
+      },
+      "s3indunil1": {
+        "name": "s3indunil1",
+        "type": "S3",
+        "config": {
+          "mode": 1,
+          "bucket": {
+            "region": "us-east-1",
+            "name": "indunil1"
+          }
+        }
+      }
+    },
+    "customTemplate": {
+      "dialect": null,
+      "definitions": {}
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {
+        "aws-sdk": {
+          "name": "aws-sdk",
+          "language": "javascript",
+          "version": "2.176.0",
+          "dev": true,
+          "notRemovable": false
+        }
+      }
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "indunilfirefox",
+    "projectDescription": "firefx",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-east-1",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1564042745759
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "indunilfirefox",
+      "url": "https://github.com/Indunil1992/indunilfirefox",
+      "branches": []
+    }
+  }
+}
