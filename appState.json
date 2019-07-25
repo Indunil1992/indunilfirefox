@@ -22,7 +22,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "indunilfirefox/lambda.js",
-        "code": "let AWS = require('aws-sdk');\nconst s3 = new AWS.S3();\n\nexports.handler = function (event, context, callback) {\n\n    s3.putObject({\n        \"Body\": \"check test\",\n        \"Bucket\": \"indunil1\",\n        \"Key\": \"1.jpg\"\n    })\n        .promise()\n        .then(data => {\n            console.log(data);           // successful response\n            /*\n            data = {\n                ETag: \"\\\"6805f2cfc46c0f04559748bb039d69ae\\\"\",\n                VersionId: \"pSKidl4pHBiNwukdbcPXAIs.sshFFOc0\"\n            }\n            */\n        })\n        .catch(err => {\n            console.log(err, err.stack); // an error occurred\n        });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
+        "code": "let AWS = require('aws-sdk');\nlet SL_AWS = require('slappforge-sdk-aws');\nconst sqs = new SL_AWS.SQS(AWS);\n\nexports.handler = function (event, context, callback) {\n    sqs.receiveMessage({\n        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/tes7t.fifo`,\n        AttributeNames: ['All'],\n        MaxNumberOfMessages: '1',\n        VisibilityTimeout: '30',\n        WaitTimeSeconds: '0'\n    }).promise()\n        .then(receivedMsgData => {\n            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {\n                let receivedMessages = receivedMsgData.Messages;\n                receivedMessages.forEach(message => {\n                    // your logic to access each message through out the loop. Each message is available under variable message \n                    // within this block\n                });\n            } else {\n                // No messages to process\n            }\n        })\n        .catch(err => {\n            // error handling goes here\n        });\n\n\n\n    callback(null, { \"message\": \"Successfully executed\" });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -35,7 +35,15 @@
             "resourceName": "apigusEast1indunil123testindany",
             "config": {}
           }
-        ]
+        ],
+        "testCases": {
+          "ac056e3e-c628-4eb8-8c8f-127af7275dbb": {
+            "id": "ac056e3e-c628-4eb8-8c8f-127af7275dbb",
+            "name": "Unnamed event",
+            "functionId": "4708f2d9-37ad-4101-a4f1-eaee0a2bb100",
+            "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
+          }
+        }
       }
     },
     "deletedFiles": [],
@@ -64,15 +72,31 @@
           "mode": 0
         }
       },
-      "s3indunil1": {
-        "name": "s3indunil1",
-        "type": "S3",
+      "sqstes7tfifo": {
+        "name": "sqstes7tfifo",
+        "type": "SQS",
         "config": {
-          "mode": 1,
-          "bucket": {
-            "region": "us-east-1",
-            "name": "indunil1"
-          }
+          "mode": 0,
+          "existing": false,
+          "name": "tes7t.fifo",
+          "url": "https://sqs.us-east-1.amazonaws.com/318300609668/tes7t.fifo",
+          "selectedRegion": "us-east-1",
+          "deliveryDelay": 0,
+          "deliveryDelayUnit": "seconds",
+          "useRedrivePolicy": false,
+          "useSSE": false,
+          "kmsCustomerMasterKey": "default",
+          "accountId": "318300609668",
+          "dataKeyReusePeriod": 5,
+          "queueType": "fifoQueue",
+          "defaultVisibilityTimeout": 30,
+          "defaultVisibilityTimeoutUnit": "seconds",
+          "messageRetentionPeriod": 4,
+          "messageRetentionPeriodUnit": "days",
+          "maximumMessageSize": 256,
+          "receiveMessageWaitTime": 0,
+          "deadLetterQueueName": "",
+          "contentBasedDeduplication": false
         }
       }
     },
@@ -98,6 +122,13 @@
           "version": "2.176.0",
           "dev": true,
           "notRemovable": false
+        },
+        "slappforge-sdk-aws": {
+          "name": "slappforge-sdk-aws",
+          "language": "javascript",
+          "version": "0.0.5",
+          "dev": false,
+          "notRemovable": false
         }
       }
     }
@@ -109,14 +140,19 @@
     "projectRegion": "us-east-1",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1564042745759
+    "lastSave": 1564042973650
   },
   "VCS_STATE": {
     "provider": "GitHub",
     "repo": {
       "name": "indunilfirefox",
       "url": "https://github.com/Indunil1992/indunilfirefox",
-      "branches": []
+      "branches": [
+        {
+          "name": "master",
+          "hash": "ec99c4cb2b3023768bf0432e588546906faff0ec"
+        }
+      ]
     }
   }
 }

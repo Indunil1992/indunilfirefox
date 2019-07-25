@@ -1,25 +1,28 @@
 let AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+let SL_AWS = require('slappforge-sdk-aws');
+const sqs = new SL_AWS.SQS(AWS);
 
 exports.handler = function (event, context, callback) {
-
-    s3.putObject({
-        "Body": "check test",
-        "Bucket": "indunil1",
-        "Key": "1.jpg"
-    })
-        .promise()
-        .then(data => {
-            console.log(data);           // successful response
-            /*
-            data = {
-                ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
-                VersionId: "pSKidl4pHBiNwukdbcPXAIs.sshFFOc0"
+    sqs.receiveMessage({
+        QueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.SIGMA_AWS_ACC_ID}/tes7t.fifo`,
+        AttributeNames: ['All'],
+        MaxNumberOfMessages: '1',
+        VisibilityTimeout: '30',
+        WaitTimeSeconds: '0'
+    }).promise()
+        .then(receivedMsgData => {
+            if (!!(receivedMsgData) && !!(receivedMsgData.Messages)) {
+                let receivedMessages = receivedMsgData.Messages;
+                receivedMessages.forEach(message => {
+                    // your logic to access each message through out the loop. Each message is available under variable message 
+                    // within this block
+                });
+            } else {
+                // No messages to process
             }
-            */
         })
         .catch(err => {
-            console.log(err, err.stack); // an error occurred
+            // error handling goes here
         });
 
 
